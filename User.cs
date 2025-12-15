@@ -2,16 +2,17 @@
 
 public class User
 {
-	public User()
-	{
+	
+	
         // constructor
         private int id;
 		private string username;
 		private string email;
 		private string password;
 		private string role;
+		private final string adminpassword = "Password1234";
 
-		public int Id
+    public int Id
 		{
 			get { return id; }
 			set { id = value; }
@@ -36,8 +37,13 @@ public class User
 			get { return role; }
 			set { role = value; }
 		}
+	public string Adminpassword
+		{
+			get { return adminpassword; }
+		set { adminpassword = value; }
+    }
 
-		public User(int id, string username, string email, string password, string role)
+    public User(int id, string username, string email, string password, string role)
 		{
 			this.id = id;
 			this.username = username;
@@ -55,5 +61,38 @@ public class User
 		{		
 			Console.WriteLine("User profile updated.");
 		}
-	}
+
+
+    private void LoadUsersFromCsv()
+    {
+        if (!File.Exists(filePath))
+            return;
+
+        string[] lines = File.ReadAllLines(filePath);
+
+        foreach (string line in lines)
+        {
+            string[] data = line.Split(',');
+
+            if (data.Length == 2)
+            {
+                users.Add(new User(data[0], data[1]));
+            }
+        }
+    }
+
+    private void SaveUsersToCsv()
+    {
+        List<string> lines = new List<string>();
+
+        foreach (User user in users)
+        {
+            lines.Add($"{user.Username},{user.Password}");
+        }
+
+        File.WriteAllLines(filePath, lines);
+    }
+
+
+
 }
